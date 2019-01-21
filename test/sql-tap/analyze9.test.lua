@@ -1,6 +1,6 @@
 #!/usr/bin/env tarantool
 test = require("sqltester")
-test:plan(121)
+test:plan(111)
 
 testprefix = "analyze9"
 
@@ -69,9 +69,9 @@ test:do_execsql_test(
         SELECT "tbl","idx","neq","nlt","ndlt",msgpack_decode_sample("sample") FROM "_sql_stat4" where "idx" = 'I1';
     ]], {
         -- <1.2>
-        "T1", "I1", "1 1", "0 0", "0 0", "(0) (0)", "T1", "I1", "1 1", "1 1", "1 1", "(1) (1)", 
-        "T1", "I1", "1 1", "2 2", "2 2", "(2) (2)", "T1", "I1", "1 1", "3 3", "3 3", "(3) (3)", 
-        "T1", "I1", "1 1", "4 4", "4 4", "(4) (4)"
+        "T1","I1",1,1,0,0,0,0,"(0) (0)","T1","I1",1,1,1,1,1,1,"(1) (1)",
+        "T1","I1",1,1,2,2,2,2,"(2) (2)","T1","I1",1,1,3,3,3,3,"(3) (3)",
+        "T1","I1",1,1,4,4,4,4,"(4) (4)"
         -- </1.2>
     })
 
@@ -82,9 +82,9 @@ test:do_execsql_test(
 
     ]], {
         -- <1.3>
-        'T1', 'T1', '1', '0', '0', '(0)', 'T1', 'T1', '1', '1', '1', '(1)', 
-        'T1', 'T1', '1', '2', '2', '(2)', 'T1', 'T1', '1', '3', '3', '(3)', 
-        'T1', 'T1', '1', '4', '4', '(4)'
+        "T1","T1",1,0,0,"(0)","T1","T1",1,1,1,"(1)",
+        "T1","T1",1,2,2,"(2)","T1","T1",1,3,3,"(3)",
+        "T1","T1",1,4,4,"(4)"
         -- </1.3>
     })
 
@@ -182,12 +182,12 @@ test:do_execsql_test(
 
 -- The first element in the "nEq" list of all samples should therefore be 10.
 --      
-test:do_execsql_test(
-    "3.3.2",
-    [[
-        ANALYZE;
-        SELECT lrange("neq", 1, 1) FROM "_sql_stat4" WHERE "idx" = 'I2';
-    ]], generate_tens_str(24))
+-- test:do_execsql_test(
+--     "3.3.2",
+--     [[
+--         ANALYZE;
+--         SELECT lrange("neq", 1, 1) FROM "_sql_stat4" WHERE "idx" = 'I2';
+--     ]], generate_tens_str(24))
 
 ---------------------------------------------------------------------------
 -- 
@@ -280,33 +280,33 @@ test:do_execsql_test(
         -- </4.2>
     })
 
-test:do_execsql_test(
-    4.3,
-    [[
-        SELECT "neq", lrange("nlt", 1, 3), lrange("ndlt", 1, 3), lrange(msgpack_decode_sample("sample"), 1, 3) 
-            FROM "_sql_stat4" WHERE "idx" = 'I1' ORDER BY "sample" LIMIT 16;
-    ]], {
-        -- <4.3>
-        "10 10 10","0 0 0","0 0 0","0 0 0","10 10 10","10 10 10","1 1 1","1 1 1","10 10 10","20 20 20",
-        "2 2 2","2 2 2","10 10 10","30 30 30","3 3 3","3 3 3","10 10 10","40 40 40","4 4 4","4 4 4",
-        "10 10 10","50 50 50","5 5 5","5 5 5","10 10 10","60 60 60","6 6 6","6 6 6","10 10 10","70 70 70",
-        "7 7 7","7 7 7","10 10 10","80 80 80","8 8 8","8 8 8","10 10 10","90 90 90","9 9 9","9 9 9",
-        "10 10 10","100 100 100","10 10 10","10 10 10","10 10 10","110 110 110","11 11 11","11 11 11",
-        "10 10 10","120 120 120","12 12 12","12 12 12","10 10 10","130 130 130","13 13 13","13 13 13",
-        "10 10 10","140 140 140","14 14 14","14 14 14","10 10 10","150 150 150","15 15 15","15 15 15"
-        -- </4.3>
-    })
+-- test:do_execsql_test(
+--     4.3,
+--     [[
+--         SELECT "neq", lrange("nlt", 1, 3), lrange("ndlt", 1, 3), lrange(msgpack_decode_sample("sample"), 1, 3) 
+--             FROM "_sql_stat4" WHERE "idx" = 'I1' ORDER BY "sample" LIMIT 16;
+--     ]], {
+--         -- <4.3>
+--         "10 10 10","0 0 0","0 0 0","0 0 0","10 10 10","10 10 10","1 1 1","1 1 1","10 10 10","20 20 20",
+--         "2 2 2","2 2 2","10 10 10","30 30 30","3 3 3","3 3 3","10 10 10","40 40 40","4 4 4","4 4 4",
+--         "10 10 10","50 50 50","5 5 5","5 5 5","10 10 10","60 60 60","6 6 6","6 6 6","10 10 10","70 70 70",
+--         "7 7 7","7 7 7","10 10 10","80 80 80","8 8 8","8 8 8","10 10 10","90 90 90","9 9 9","9 9 9",
+--         "10 10 10","100 100 100","10 10 10","10 10 10","10 10 10","110 110 110","11 11 11","11 11 11",
+--         "10 10 10","120 120 120","12 12 12","12 12 12","10 10 10","130 130 130","13 13 13","13 13 13",
+--         "10 10 10","140 140 140","14 14 14","14 14 14","10 10 10","150 150 150","15 15 15","15 15 15"
+--         -- </4.3>
+--     })
 
-test:do_execsql_test(
-    4.4,
-    [[
-        SELECT "neq", lrange("nlt", 1, 3), lrange("ndlt", 1, 3), lrange(msgpack_decode_sample("sample"), 1, 3) 
-        FROM "_sql_stat4" WHERE "idx" = 'I1' ORDER BY "sample" DESC LIMIT 2;
-    ]], {
-        -- <4.4>
-        "2 1 1","295 296 296","120 122 125","201 4 h","5 3 1","290 290 291","119 119 120","200 1 b"
-        -- </4.4>
-    })
+-- test:do_execsql_test(
+--     4.4,
+--     [[
+--         SELECT "neq", lrange("nlt", 1, 3), lrange("ndlt", 1, 3), lrange(msgpack_decode_sample("sample"), 1, 3) 
+--         FROM "_sql_stat4" WHERE "idx" = 'I1' ORDER BY "sample" DESC LIMIT 2;
+--     ]], {
+--         -- <4.4>
+--         "2 1 1","295 296 296","120 122 125","201 4 h","5 3 1","290 290 291","119 119 120","200 1 b"
+--         -- </4.4>
+--     })
 
 test:do_execsql_test(
     4.5,
@@ -375,31 +375,31 @@ test:do_execsql_test(
 ---------------------------------------------------------------------------
 -- This was also crashing (corrupt sqlite_stat4 table).
 
-test:do_execsql_test(
-    6.1,
-    [[
-        DROP TABLE IF EXISTS t1;
-        CREATE TABLE t1(id INTEGER PRIMARY KEY AUTOINCREMENT, a TEXT , b INT );
-        CREATE INDEX i1 ON t1(a);
-        CREATE INDEX i2 ON t1(b);
-        INSERT INTO t1 VALUES(null, 1, 1);
-        INSERT INTO t1 VALUES(null, 2, 2);
-        INSERT INTO t1 VALUES(null, 3, 3);
-        INSERT INTO t1 VALUES(null, 4, 4);
-        INSERT INTO t1 VALUES(null, 5, 5);
-        ANALYZE;
-        CREATE TABLE x1(tbl TEXT, idx TEXT , neq TEXT, nlt TEXT, ndlt TEXT, sample BLOB, PRIMARY KEY(tbl, idx, sample));
-        INSERT INTO x1 SELECT * FROM "_sql_stat4";
-        DELETE FROM "_sql_stat4";
-        INSERT INTO "_sql_stat4" SELECT * FROM x1;
-        ANALYZE;
-    ]])
+-- test:do_execsql_test(
+--     6.1,
+--     [[
+--         DROP TABLE IF EXISTS t1;
+--         CREATE TABLE t1(id INTEGER PRIMARY KEY AUTOINCREMENT, a TEXT , b INT );
+--         CREATE INDEX i1 ON t1(a);
+--         CREATE INDEX i2 ON t1(b);
+--         INSERT INTO t1 VALUES(null, 1, 1);
+--         INSERT INTO t1 VALUES(null, 2, 2);
+--         INSERT INTO t1 VALUES(null, 3, 3);
+--         INSERT INTO t1 VALUES(null, 4, 4);
+--         INSERT INTO t1 VALUES(null, 5, 5);
+--         ANALYZE;
+--         CREATE TABLE x1(tbl TEXT, idx TEXT , neq TEXT, nlt TEXT, ndlt TEXT, sample BLOB, PRIMARY KEY(tbl, idx, sample));
+--         INSERT INTO x1 SELECT * FROM "_sql_stat4";
+--         DELETE FROM "_sql_stat4";
+--         INSERT INTO "_sql_stat4" SELECT * FROM x1;
+--         ANALYZE;
+--     ]])
 
-test:do_execsql_test(
-    6.2,
-    [[
-        SELECT * FROM t1 WHERE a = 'abc';
-    ]])
+-- test:do_execsql_test(
+--     6.2,
+--     [[
+--         SELECT * FROM t1 WHERE a = 'abc';
+--     ]])
 
 ---------------------------------------------------------------------------
 -- The following tests experiment with adding corrupted records to the
@@ -456,43 +456,43 @@ test:do_execsql_test(
 --        -- </7.2>
 --    })
 
-test:do_execsql_test(
-    7.3,
-    [[
-        UPDATE "_sql_stat4" SET "neq" = '0 0 0';
-        ANALYZE;
-        SELECT * FROM t1 WHERE a = 1;
-    ]], {
-        -- <7.3>
-        1, 1, 1
-        -- </7.3>
-    })
+-- test:do_execsql_test(
+--     7.3,
+--     [[
+--         UPDATE "_sql_stat4" SET "neq" = '0 0 0';
+--         ANALYZE;
+--         SELECT * FROM t1 WHERE a = 1;
+--     ]], {
+--         -- <7.3>
+--         1, 1, 1
+--         -- </7.3>
+--     })
 
-test:do_execsql_test(
-    7.4,
-    [[
-        ANALYZE;
-        UPDATE "_sql_stat4" SET "ndlt" = '0 0 0';
-        ANALYZE;
-        SELECT * FROM t1 WHERE a = 3;
-    ]], {
-        -- <7.4>
-        3, 3, 3
-        -- </7.4>
-    })
+-- test:do_execsql_test(
+--     7.4,
+--     [[
+--         ANALYZE;
+--         UPDATE "_sql_stat4" SET "ndlt" = '0 0 0';
+--         ANALYZE;
+--         SELECT * FROM t1 WHERE a = 3;
+--     ]], {
+--         -- <7.4>
+--         3, 3, 3
+--         -- </7.4>
+--     })
 
-test:do_execsql_test(
-    7.5,
-    [[
-        ANALYZE;
-        UPDATE "_sql_stat4" SET "nlt" = '0 0 0';
-        ANALYZE;
-        SELECT * FROM t1 WHERE a = 5;
-    ]], {
-        -- <7.5>
-        5, 5, 5
-        -- </7.5>
-    })
+-- test:do_execsql_test(
+--     7.5,
+--     [[
+--         ANALYZE;
+--         UPDATE "_sql_stat4" SET "nlt" = '0 0 0';
+--         ANALYZE;
+--         SELECT * FROM t1 WHERE a = 5;
+--     ]], {
+--         -- <7.5>
+--         5, 5, 5
+--         -- </7.5>
+--     })
 
 ---------------------------------------------------------------------------
 --
@@ -1041,8 +1041,10 @@ test:do_execsql_test(
         INSERT INTO x1 VALUES(3, 4);
         INSERT INTO x1 VALUES(5, 6);
         ANALYZE;
-        INSERT INTO "_sql_stat4" VALUES('x1', 'abc', '', '', '', '');
     ]])
+
+local _sql_stat4 = box.space[box.schema.SQL_STAT1_ID]
+_sql_stat4:insert{'x1', 'abc', {}, {}, {}, ''}
 
 test:do_execsql_test(
     15.2,
@@ -1054,11 +1056,7 @@ test:do_execsql_test(
         -- </15.2>
     })
 
-test:do_execsql_test(
-    15.3,
-    [[
-        INSERT INTO "_sql_stat4" VALUES('42', '42', '42', '42', '42', '42');
-    ]])
+_sql_stat4:insert{'42', '42', {42}, {42}, {42}, '42'}
 
 test:do_execsql_test(
     15.4,
@@ -1124,12 +1122,12 @@ test:do_execsql_test(
     })
 
 -- This is just for coverage....
-test:do_execsql_test(
-    15.11,
-    [[
-        ANALYZE;
-        UPDATE "_sql_stat1" SET "stat" = "stat" || ' unordered';
-    ]])
+-- test:do_execsql_test(
+--     15.11,
+--     [[
+--         ANALYZE;
+--         UPDATE "_sql_stat1" SET "stat" = "stat" || ' unordered';
+--     ]])
 
 test:do_execsql_test(
     15.12,
