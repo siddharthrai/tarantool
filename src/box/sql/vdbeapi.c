@@ -361,6 +361,19 @@ invokeValueDestructor(const void *p,	/* Value to destroy */
 }
 
 void
+sqlite3_result_msgpack(sqlite3_context * pCtx,
+		    const void *z, int n, void (*xDel) (void *)
+    )
+{
+	assert(n >= 0);
+	if (sqlite3VdbeMemSetStr(pCtx->pOut, z, n,0, xDel) == SQLITE_TOOBIG) {
+		sqlite3_result_error_toobig(pCtx);
+	}
+	pCtx->pOut->flags|= MEM_Subtype;
+	pCtx->pOut->subtype = SQL_SUBTYPE_MSGPACK;
+}
+
+void
 sqlite3_result_blob(sqlite3_context * pCtx,
 		    const void *z, int n, void (*xDel) (void *)
     )

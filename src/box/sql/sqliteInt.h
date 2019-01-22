@@ -465,6 +465,9 @@ sqlite3_value_numeric_type(sqlite3_value *);
 sqlite3 *
 sqlite3_context_db_handle(sqlite3_context *);
 
+void
+sqlite3_result_msgpack(sqlite3_context *, const void *,
+		    int, void (*)(void *));
 
 void
 sqlite3_result_blob(sqlite3_context *, const void *,
