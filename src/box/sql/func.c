@@ -128,6 +128,30 @@ typeofFunc(sqlite3_context * context, int NotUsed, sqlite3_value ** argv)
 	sqlite3_result_text(context, z, -1, SQLITE_STATIC);
 }
 
+/**
+ * Return number of chars in the given string.
+ *
+ * Number of chars != byte size of string because some characters
+ * are encoded with more than one byte. Also note that all
+ * characters from 'str' to 'str + byte_len' would be counted,
+ * even if there is a '\0' somewhere between them.
+ * @param str String to be counted.
+ * @param byte_len Byte length of given string.
+ * @return
+ */
+static int
+count_chars(const unsigned char *str, size_t byte_len)
+{
+	int n_chars = 0;
+	const unsigned char *prev_z;
+	for (size_t cnt = 0; cnt < byte_len; cnt += (str - prev_z)) {
+		n_chars++;
+		prev_z = str;
+		SQLITE_SKIP_UTF8(str);
+	}
+	return n_chars;
+}
+
 /*
  * Implementation of the length() function
  */
@@ -150,11 +174,7 @@ lengthFunc(sqlite3_context * context, int argc, sqlite3_value ** argv)
 			const unsigned char *z = sqlite3_value_text(argv[0]);
 			if (z == 0)
 				return;
-			len = 0;
-			while (*z) {
-				len++;
-				SQLITE_SKIP_UTF8(z);
-			}
+			len = count_chars(z, sqlite3_value_bytes(argv[0]));
 			sqlite3_result_int(context, len);
 			break;
 		}
@@ -340,11 +360,8 @@ substrFunc(sqlite3_context * context, int argc, sqlite3_value ** argv)
 		if (z == 0)
 			return;
 		len = 0;
-		if (p1 < 0) {
-			for (z2 = z; *z2; len++) {
-				SQLITE_SKIP_UTF8(z2);
-			}
-		}
+		if (p1 < 0)
+			len = count_chars(z, sqlite3_value_bytes(argv[0]));
 	}
 #ifdef SQLITE_SUBSTR_COMPATIBILITY
 	/* If SUBSTR_COMPATIBILITY is defined then substr(X,0,N) work the same as
@@ -388,12 +405,21 @@ substrFunc(sqlite3_context * context, int argc, sqlite3_value ** argv)
 	}
 	assert(p1 >= 0 && p2 >= 0);
 	if (p0type != SQLITE_BLOB) {
-		while (*z && p1) {
+		/*
+		 * In the code below 'cnt' and 'n_chars' is
+		 * used because '\0' is not supposed to be
+		 * end-of-string symbol.
+		 */
+		int n_chars = count_chars(z, sqlite3_value_bytes(argv[0]));
+		int cnt = 0;
+		while (cnt < n_chars && p1) {
 			SQLITE_SKIP_UTF8(z);
+			cnt++;
 			p1--;
 		}
-		for (z2 = z; *z2 && p2; p2--) {
+		for (z2 = z; cnt < n_chars && p2; p2--) {
 			SQLITE_SKIP_UTF8(z2);
+			cnt++;
 		}
 		sqlite3_result_text64(context, (char *)z, z2 - z,
 				      SQLITE_TRANSIENT);
@@ -620,8 +646,14 @@ enum pattern_match_status {
  * This routine is usually quick, but can be N**2 in the worst
  * case.
  *
+ * 'pattern_end' and 'string_end' params are used to determine
+ * the end of strings, because '\0' is not supposed to be
+ * end-of-string signal.
+ *
  * @param pattern String containing comparison pattern.
  * @param string String being compared.
+ * @param pattern_end Ptr to pattern last symbol.
+ * @param string_end Ptr to string last symbol.
  * @param is_like_ci true if LIKE is case insensitive.
  * @param match_other The escape char for LIKE.
  *
@@ -630,6 +662,8 @@ enum pattern_match_status {
 static int
 sql_utf8_pattern_compare(const char *pattern,
 			 const char *string,
+			 const char *pattern_end,
+			 const char *string_end,
 			 const int is_like_ci,
 			 UChar32 match_other)
 {
@@ -637,8 +671,6 @@ sql_utf8_pattern_compare(const char *pattern,
 	UChar32 c, c2;
 	/* One past the last escaped input char. */
 	const char *zEscaped = 0;
-	const char *pattern_end = pattern + strlen(pattern);
-	const char *string_end = string + strlen(string);
 	UErrorCode status = U_ZERO_ERROR;
 
 	while (pattern < pattern_end) {
@@ -721,6 +753,8 @@ sql_utf8_pattern_compare(const char *pattern,
 				}
 				bMatch = sql_utf8_pattern_compare(pattern,
 								  string,
+								  pattern_end,
+								  string_end,
 								  is_like_ci,
 								  match_other);
 				if (bMatch != NO_MATCH)
@@ -768,7 +802,9 @@ sql_utf8_pattern_compare(const char *pattern,
 int
 sql_strlike_cs(const char *zPattern, const char *zStr, unsigned int esc)
 {
-	return sql_utf8_pattern_compare(zPattern, zStr, 0, esc);
+	return sql_utf8_pattern_compare(zPattern, zStr,
+		                        zPattern + strlen(zPattern),
+		                        zStr + strlen(zStr), 0, esc);
 }
 
 /**
@@ -778,7 +814,9 @@ sql_strlike_cs(const char *zPattern, const char *zStr, unsigned int esc)
 int
 sql_strlike_ci(const char *zPattern, const char *zStr, unsigned int esc)
 {
-	return sql_utf8_pattern_compare(zPattern, zStr, 1, esc);
+	return sql_utf8_pattern_compare(zPattern, zStr,
+		                        zPattern + strlen(zPattern),
+		                        zStr + strlen(zStr), 1, esc);
 }
 
 /**
@@ -802,7 +840,6 @@ int sqlite3_like_count = 0;
 static void
 likeFunc(sqlite3_context *context, int argc, sqlite3_value **argv)
 {
-	const char *zA, *zB;
 	u32 escape = SQL_END_OF_STRING;
 	int nPat;
 	sqlite3 *db = sqlite3_context_db_handle(context);
@@ -818,8 +855,10 @@ likeFunc(sqlite3_context *context, int argc, sqlite3_value **argv)
 		return;
 	}
 #endif
-	zB = (const char *) sqlite3_value_text(argv[0]);
-	zA = (const char *) sqlite3_value_text(argv[1]);
+	const char *zB = (const char *) sqlite3_value_text(argv[0]);
+	const char *zA = (const char *) sqlite3_value_text(argv[1]);
+	const char *zB_end = zB + sqlite3_value_bytes(argv[0]);
+	const char *zA_end = zA + sqlite3_value_bytes(argv[1]);
 
 	/*
 	 * Limit the length of the LIKE pattern to avoid problems
@@ -860,7 +899,8 @@ likeFunc(sqlite3_context *context, int argc, sqlite3_value **argv)
 	sqlite3_like_count++;
 #endif
 	int res;
-	res = sql_utf8_pattern_compare(zB, zA, is_like_ci, escape);
+	res = sql_utf8_pattern_compare(zB, zA, zB_end, zA_end,
+				       is_like_ci, escape);
 	if (res == INVALID_PATTERN) {
 		const char *const err_msg =
 			"LIKE pattern can only contain UTF-8 characters";
@@ -1135,12 +1175,12 @@ replaceFunc(sqlite3_context * context, int argc, sqlite3_value ** argv)
 		       || sqlite3_context_db_handle(context)->mallocFailed);
 		return;
 	}
-	if (zPattern[0] == 0) {
+	nPattern = sqlite3_value_bytes(argv[1]);
+	if (nPattern == 0) {
 		assert(sqlite3_value_type(argv[1]) != SQLITE_NULL);
 		sqlite3_result_value(context, argv[0]);
 		return;
 	}
-	nPattern = sqlite3_value_bytes(argv[1]);
 	assert(zPattern == sqlite3_value_text(argv[1]));	/* No encoding change */
 	zRep = sqlite3_value_text(argv[2]);
 	if (zRep == 0)
@@ -1595,8 +1635,8 @@ groupConcatFinalize(sqlite3_context * context)
 			sqlite3_result_error_nomem(context);
 		} else {
 			sqlite3_result_text(context,
-					    sqlite3StrAccumFinish(pAccum), -1,
-					    sqlite3_free);
+					    sqlite3StrAccumFinish(pAccum),
+					    pAccum->nChar, sqlite3_free);
 		}
 	}
 }
