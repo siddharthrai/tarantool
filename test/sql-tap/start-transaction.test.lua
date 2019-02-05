@@ -21,7 +21,7 @@ test:do_catchsql_test(
 		COMMIT;
 	]], {
 		-- <start-transaction-1.0>
-		1, "near \"BEGIN\": syntax error"
+		1, "Near 'BEGIN': syntax error"
 		-- <start-transaction-1.0>
 	})
 
@@ -46,7 +46,7 @@ test:do_catchsql_test(
 		COMMIT;
 	]], {
 		-- <start-transaction-1.1>
-		1, "near \"BEGIN\": syntax error"
+		1, "Near 'BEGIN': syntax error"
 		-- <start-transaction-1.1>
 	})
 

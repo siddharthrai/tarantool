@@ -12,7 +12,7 @@ box.sql.execute("CREATE TABLE t1 (id PRIMARY KEY);")
 ...
 box.sql.execute("CREATE TABLE t1 (a, id INT PRIMARY KEY);")
 ---
-- error: 'near ",": syntax error'
+- error: 'Near '','': syntax error'
 ...
 box.sql.execute("CREATE TABLE t1 (id PRIMARY KEY, a INT);")
 ---
@@ -20,7 +20,7 @@ box.sql.execute("CREATE TABLE t1 (id PRIMARY KEY, a INT);")
 ...
 box.sql.execute("CREATE TABLE t1 (id INT PRIMARY KEY, a);")
 ---
-- error: 'near ")": syntax error'
+- error: 'Near '')'': syntax error'
 ...
 box.sql.execute("CREATE TABLE t1 (id INT PRIMARY KEY, a INT, b UNIQUE);")
 ---

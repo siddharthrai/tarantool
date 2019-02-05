@@ -620,7 +620,7 @@ test:do_catchsql_test(
 		CREATE TEMP TABLE t1(a INTEGER PRIMARY KEY, b VARCHAR(10));
 	]], {
 	-- <temp>
-	1, "near \"TEMP\": syntax error"
+	1, "Near 'TEMP': syntax error"
 	-- <temp>
 	})
 
@@ -630,7 +630,7 @@ test:do_catchsql_test(
 		CREATE TEMPORARY TABLE t1(a INTEGER PRIMARY KEY, b VARCHAR(10));
 	]], {
 	-- <temporary>
-	1, "near \"TEMPORARY\": syntax error"
+	1, "Near 'TEMPORARY': syntax error"
 	-- <temporary>
 	})
 

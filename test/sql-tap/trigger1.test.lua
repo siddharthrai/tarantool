@@ -72,7 +72,7 @@ test:do_catchsql_test(
         END;
     ]], {
         -- <trigger1-1.1.3>
-        1, [[near "STATEMENT": syntax error]]
+        1, [[Near 'STATEMENT': syntax error]]
         -- </trigger1-1.1.3>
     })
 
@@ -297,7 +297,7 @@ test:do_catchsql_test(
         END;
     ]], {
         -- <trigger1-2.1>
-        1, [[near ";": syntax error]]
+        1, [[Near ';': syntax error]]
         -- </trigger1-2.1>
     })
 
@@ -310,7 +310,7 @@ test:do_catchsql_test(
         END;
     ]], {
         -- <trigger1-2.2>
-        1, [[near ";": syntax error]]
+        1, [[Near ';': syntax error]]
         -- </trigger1-2.2>
     })
 

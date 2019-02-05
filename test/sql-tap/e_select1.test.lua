@@ -807,10 +807,10 @@ test:do_select_tests(
 -- FROM clause.
 --
 data = {
-    {"1.1", "SELECT a, b, c FROM z1 WHERE *",  'near \"*\": syntax error'},
-    {"1.2", "SELECT a, b, c FROM z1 GROUP BY *", 'near \"*\": syntax error'},
-    {"1.3", "SELECT 1 + * FROM z1",  'near \"*\": syntax error'},
-    {"1.4", "SELECT * + 1 FROM z1", 'near \"+\": syntax error'},
+    {"1.1", "SELECT a, b, c FROM z1 WHERE *",  "Near '*': syntax error"},
+    {"1.2", "SELECT a, b, c FROM z1 GROUP BY *", "Near '*': syntax error"},
+    {"1.3", "SELECT 1 + * FROM z1",  "Near '*': syntax error"},
+    {"1.4", "SELECT * + 1 FROM z1", "Near '+': syntax error"},
     {"2.1", "SELECT *", 'no tables specified'},
     {"2.2", "SELECT * WHERE 1", 'no tables specified'},
     {"2.3", "SELECT * WHERE 0", 'no tables specified'},

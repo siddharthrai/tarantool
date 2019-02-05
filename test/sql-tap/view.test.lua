@@ -977,7 +977,7 @@ test:do_catchsql_test(
         DROP VIEW main.nosuchview
     ]], {
         -- <view-17.2>
-        1, "near \".\": syntax error"
+        1, "Near '.': syntax error"
         -- </view-17.2>
     })
 

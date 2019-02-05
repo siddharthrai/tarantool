@@ -35,7 +35,17 @@
   if (yypParser->is_fallback_failed && TOKEN.isReserved) {
     sqlite3ErrorMsg(pParse, "keyword \"%T\" is reserved", &TOKEN);
   } else {
-    sqlite3ErrorMsg(pParse, "near \"%T\": syntax error", &TOKEN);
+    char *token = region_alloc(&pParse->region, TOKEN.n + 1);
+    if (token == NULL) {
+      diag_set(OutOfMemory, TOKEN.n + 1, "region_alloc", "token");
+      pParse->rc = SQL_TARANTOOL_ERROR;
+      pParse->nErr++;
+    } else {
+      memset(token, 0, TOKEN.n + 1);
+      memcpy(token, TOKEN.z, TOKEN.n);
+      diag_set(ClientError, ER_SQL_SYNTAX_ERROR, token);
+      sqlite3_error(pParse);
+    }
   }
 }
 %stack_overflow {
@@ -881,14 +891,35 @@ expr(A) ::= VARIABLE(X).     {
   } else if (!(X.z[0]=='#' && sqlite3Isdigit(X.z[1]))) {
     u32 n = X.n;
     spanExpr(&A, pParse, TK_VARIABLE, X);
-    if (A.pExpr->u.zToken[0] == '?' && n > 1)
-        sqlite3ErrorMsg(pParse, "near \"%T\": syntax error", &t);
-    else
+    if (A.pExpr->u.zToken[0] == '?' && n > 1) {
+      char *token = region_alloc(&pParse->region, t.n + 1);
+      if (token == NULL) {
+        diag_set(OutOfMemory, t.n + 1, "region_alloc", "token");
+        pParse->rc = SQL_TARANTOOL_ERROR;
+        pParse->nErr++;
+      } else {
+        memset(token, 0, t.n + 1);
+        memcpy(token, t.z, t.n);
+        diag_set(ClientError, ER_SQL_SYNTAX_ERROR, token);
+        sqlite3_error(pParse);
+      }
+    } else {
         sqlite3ExprAssignVarNumber(pParse, A.pExpr, n);
+    }
   }else{
     assert( t.n>=2 );
     spanSet(&A, &t, &t);
-    sqlite3ErrorMsg(pParse, "near \"%T\": syntax error", &t);
+    char *token = region_alloc(&pParse->region, t.n + 1);
+    if (token == NULL) {
+      diag_set(OutOfMemory, t.n + 1, "region_alloc", "token");
+      pParse->rc = SQL_TARANTOOL_ERROR;
+      pParse->nErr++;
+    } else {
+      memset(token, 0, t.n + 1);
+      memcpy(token, t.z, t.n);
+      diag_set(ClientError, ER_SQL_SYNTAX_ERROR, token);
+      sqlite3_error(pParse);
+    }
     A.pExpr = NULL;
   }
 }

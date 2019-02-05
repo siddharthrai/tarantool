@@ -1406,7 +1406,7 @@ test:do_catchsql_test(
         SELECT f1 FROM test1 WHERE f2=;
     ]], {
         -- <select1-7.1>
-        1, [[near ";": syntax error]]
+        1, [[Near ';': syntax error]]
         -- </select1-7.1>
     })
 
@@ -1438,7 +1438,7 @@ test:do_catchsql_test(
         SELECT f1 FROM test1 ORDER BY;
     ]], {
         -- <select1-7.4>
-        1, [[near ";": syntax error]]
+        1, [[Near ';': syntax error]]
         -- </select1-7.4>
     })
 
@@ -1468,7 +1468,7 @@ test:do_catchsql_test(
         SELECT count(f1,f2+) FROM test1;
     ]], {
         -- <select1-7.7>
-        1, [[near ")": syntax error]]
+        1, [[Near ')': syntax error]]
         -- </select1-7.7>
     })
 
@@ -1478,7 +1478,7 @@ test:do_catchsql_test(
         SELECT f1 FROM test1 ORDER BY f2, f1+;
     ]], {
         -- <select1-7.8>
-        1, [[near ";": syntax error]]
+        1, [[Near ';': syntax error]]
         -- </select1-7.8>
     })
 

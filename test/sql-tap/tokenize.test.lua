@@ -145,7 +145,7 @@ test:do_catchsql_test(
     [[
         SELECT 1, 2 /*]], {
         -- <tokenize-2.1>
-        1, [[near "*": syntax error]]
+        1, [[Near '*': syntax error]]
         -- </tokenize-2.1>
     })
 

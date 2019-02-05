@@ -190,7 +190,7 @@ test:do_catchsql_test("select3-2.14", [[
   SELECT log, count(*) FROM t1 GROUP BY;
 ]], {
   -- <select3-2.14>
-  1, [[near ";": syntax error]]
+  1, [[Near ';': syntax error]]
   -- </select3-2.14>
 })
 

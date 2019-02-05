@@ -281,7 +281,7 @@ test:do_catchsql_test(
         );
     ]], {
         -- <check-2.10>
-        1,"near \",\": syntax error"
+        1,"Near ',': syntax error"
         -- </check-2.10>
     })
 
@@ -295,7 +295,7 @@ test:do_catchsql_test(
         );
     ]], {
         -- <check-2.10>
-        1,"near \",\": syntax error"
+        1,"Near ',': syntax error"
         -- </check-2.10>
     })
 
