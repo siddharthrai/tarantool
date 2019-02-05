@@ -2575,9 +2575,11 @@ sql_drop_index(struct Parse *parse_context, struct SrcList *index_name_list,
 	uint32_t index_id = box_index_id_by_name(space->def->id, index_name,
 						 strlen(index_name));
 	if (index_id == BOX_ID_NIL) {
-		if (!if_exists)
-			sqlite3ErrorMsg(parse_context, "no such index: %s.%s",
-					table_name, index_name);
+		if (!if_exists) {
+			diag_set(ClientError, ER_SQL_NO_SUCH_INDEX, index_name,
+				 table_name);
+			sqlite3_error(parse_context);
+		}
 		goto exit_drop_index;
 	}
 	struct index *index = space_index(space, index_id);

@@ -4404,8 +4404,9 @@ sqlite3IndexedByLookup(Parse * pParse, struct SrcList_item *pFrom)
 			}
 		}
 		if (idx == NULL) {
-			sqlite3ErrorMsg(pParse, "no such index: %s", zIndexedBy,
-					0);
+			diag_set(ClientError, ER_SQL_NO_SUCH_INDEX, zIndexedBy,
+				 pTab->def->name);
+			sqlite3_error(pParse);
 			return SQLITE_ERROR;
 		}
 		pFrom->pIBIndex = idx->def;

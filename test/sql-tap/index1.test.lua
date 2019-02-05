@@ -411,7 +411,7 @@ test:do_catchsql_test(
         DROP INDEX index1 ON test1
     ]], {
         -- <index-8.1>
-        1, "no such index: TEST1.INDEX1"
+        1, "No index 'INDEX1' is defined in table 'TEST1'"
         -- </index-8.1>
     })
 

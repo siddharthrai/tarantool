@@ -229,6 +229,7 @@ struct errcode_record {
 	/*174 */_(ER_ILLEGAL_COLLATION_MIX,	"Illegal mix of collations") \
 	/*175 */_(ER_SQL_TABLE_EXISTS,		"Table '%s' already exists") \
 	/*176 */_(ER_SQL_NO_SUCH_TABLE,		"Table '%s' does not exist") \
+	/*177 */_(ER_SQL_NO_SUCH_INDEX,		"No index '%s' is defined in table '%s'") \
 
 /*
  * !IMPORTANT! Please follow instructions at start of the file
