@@ -106,7 +106,7 @@ test:do_catchsql_test(
         SELECT * FROM v1 ORDER BY a;
     ]], {
         -- <view-1.4>
-        1, "no such table: V1"
+        1, "Table 'V1' does not exist"
         -- </view-1.4>
     })
 

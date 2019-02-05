@@ -537,7 +537,7 @@ test:do_catchsql_test("6.3.2", [[
     INSERT INTO t2 SELECT a, b FROM abc;
 ]], {
     -- <6.3>
-    1, "no such table: ABC"
+    1, "Table 'ABC' does not exist"
     -- </6.3>
 })
 

@@ -1138,7 +1138,7 @@ xferOptimization(Parse * pParse,	/* Parser context */
 		return 0;	/* Must be of the form  INSERT INTO ... SELECT ... */
 	if (pParse->pWith || pSelect->pWith) {
 		/* Do not attempt to process this query if there are an WITH clauses
-		 * attached to it. Proceeding may generate a false "no such table: xxx"
+		 * attached to it. Proceeding may generate a false ER_SQL_NO_SUCH_TABLE
 		 * error if pSelect reads from a CTE named "xxx".
 		 */
 		return 0;

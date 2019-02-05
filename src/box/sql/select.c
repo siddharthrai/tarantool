@@ -5043,9 +5043,8 @@ selectExpander(Walker * pWalker, Select * p)
 				}
 				if (!tableSeen) {
 					if (zTName) {
-						sqlite3ErrorMsg(pParse,
-								"no such table: %s",
-								zTName);
+						diag_set(ClientError, ER_SQL_NO_SUCH_TABLE, zTName);
+						sqlite3_error(pParse);
 					} else {
 						sqlite3ErrorMsg(pParse,
 								"no tables specified");

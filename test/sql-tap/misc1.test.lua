@@ -423,7 +423,7 @@ test:do_catchsql_test(
         SELECT t1.*;
     ]], {
         -- <misc1-8.2>
-        1, "no such table: T1"
+        1, "Table 'T1' does not exist"
         -- </misc1-8.2>
     })
 

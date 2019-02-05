@@ -377,7 +377,7 @@ test:do_catchsql_test(
         DROP TABLE test009
     ]], {
         -- <table-5.1.1>
-        1, "no such table: TEST009"
+        1, "Table 'TEST009' does not exist"
         -- </table-5.1.1>
     })
 
@@ -650,7 +650,7 @@ test:do_catchsql_test(
         SELECT * FROM t5;
     ]], {
         -- <table-8.7>
-        1, "no such table: T5"
+        1, "Table 'T5' does not exist"
         -- </table-8.7>
     })
 

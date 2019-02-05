@@ -1714,9 +1714,10 @@ sql_drop_table(struct Parse *parse_context, struct SrcList *table_name_list,
 	const char *space_name = table_name_list->a[0].zName;
 	struct space *space = space_by_name(space_name);
 	if (space == NULL) {
-		if (!is_view && !if_exists)
-			sqlite3ErrorMsg(parse_context, "no such table: %s",
-					space_name);
+		if (!is_view && !if_exists) {
+			diag_set(ClientError, ER_SQL_NO_SUCH_TABLE, space_name);
+			sqlite3_error(parse_context);
+		}
 		if (is_view && !if_exists)
 			sqlite3ErrorMsg(parse_context, "no such view: %s",
 					space_name);

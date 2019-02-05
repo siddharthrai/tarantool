@@ -26,7 +26,7 @@ test:do_catchsql_test("insert-1.1", [[
   INSERT INTO test1 VALUES(1,2,3)
 ]], {
   -- <insert-1.1>
-  1, "no such table: TEST1"
+  1, "Table 'TEST1' does not exist"
   -- </insert-1.1>
 })
 

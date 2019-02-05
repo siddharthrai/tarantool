@@ -25,7 +25,7 @@ test:do_catchsql_test("update-1.1", [[
   UPDATE test1 SET f2=5 WHERE f1<1
 ]], {
   -- <update-1.1>
-  1, "no such table: TEST1"
+  1, "Table 'TEST1' does not exist"
   -- </update-1.1>
 })
 
