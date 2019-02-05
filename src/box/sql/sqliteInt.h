@@ -3266,6 +3266,7 @@ void sqlite3TreeViewWith(TreeView *, const With *);
 
 void sqlite3SetString(char **, sqlite3 *, const char *);
 void sqlite3ErrorMsg(Parse *, const char *, ...);
+void sqlite3_error(Parse * pParse);
 void sqlite3Dequote(char *);
 void sqlite3NormalizeName(char *z);
 void sqlite3TokenInit(Token *, char *);

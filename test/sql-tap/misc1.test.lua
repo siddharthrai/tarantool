@@ -887,7 +887,7 @@ test:do_catchsql_test(
         CREATE TABLE test(a integer, primary key(a));
     ]], {
         -- <misc1-16.2>
-        1, "table TEST already exists"
+        1, "Table 'TEST' already exists"
         -- </misc1-16.2>
     })
 

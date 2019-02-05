@@ -415,8 +415,8 @@ sqlite3StartTable(Parse *pParse, Token *pName, int noErr)
 	struct space *space = space_by_name(zName);
 	if (space != NULL) {
 		if (!noErr) {
-			sqlite3ErrorMsg(pParse, "table %s already exists",
-					zName);
+			diag_set(ClientError, ER_SQL_TABLE_EXISTS, zName);
+			sqlite3_error(pParse);
 		} else {
 			assert(!db->init.busy || CORRUPT_DB);
 		}

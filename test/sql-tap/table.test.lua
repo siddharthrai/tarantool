@@ -131,7 +131,7 @@ test:do_test(
         return test:catchsql "CREATE TABLE test2(id primary key, two text default 'hi')"
     end, {
         -- <table-2.1>
-        1, "table TEST2 already exists"
+        1, "Table 'TEST2' already exists"
         -- </table-2.1>
     })
 
@@ -266,7 +266,7 @@ test:do_catchsql_test(
         CREATE TABLE BIG(xyz int primary key)
     ]], {
         -- <table-3.2>
-        1, "table BIG already exists"
+        1, "Table 'BIG' already exists"
         -- </table-3.2>
     })
 
@@ -276,7 +276,7 @@ test:do_catchsql_test(
         CREATE TABLE biG(xyz int primary key)
     ]], {
         -- <table-3.3>
-        1, "table BIG already exists"
+        1, "Table 'BIG' already exists"
         -- </table-3.3>
     })
 
@@ -286,7 +286,7 @@ test:do_catchsql_test(
         CREATE TABLE bIg(xyz int primary key)
     ]], {
         -- <table-3.4>
-        1, "table BIG already exists"
+        1, "Table 'BIG' already exists"
         -- </table-3.4>
     })
 

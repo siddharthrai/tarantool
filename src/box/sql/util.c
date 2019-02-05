@@ -246,6 +246,16 @@ sqlite3ErrorMsg(Parse * pParse, const char *zFormat, ...)
 	}
 }
 
+void
+sqlite3_error(Parse * pParse)
+{
+	sqlite3 *db = pParse->db;
+	if (db->suppressErr)
+		return;
+	pParse->nErr++;
+	pParse->rc = SQL_TARANTOOL_ERROR;
+}
+
 /*
  * Convert an SQL-style quoted string into a normal string by removing
  * the quote characters.  The conversion is done in-place.  If the
