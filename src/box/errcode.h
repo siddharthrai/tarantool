@@ -232,6 +232,7 @@ struct errcode_record {
 	/*177 */_(ER_SQL_NO_SUCH_INDEX,		"No index '%s' is defined in table '%s'") \
 	/*178 */_(ER_SQL_NO_SUCH_VIEW,		"View '%s' does not exist") \
 	/*179 */_(ER_SQL_SYNTAX_ERROR,		"Near '%s': syntax error") \
+	/*180 */_(ER_SQL_EMPTY_REQUEST,		"Syntax error: empty request") \
 
 /*
  * !IMPORTANT! Please follow instructions at start of the file

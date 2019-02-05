@@ -124,7 +124,8 @@ ecmd ::= explain cmdx SEMI. {
 		sql_finish_coding(pParse);
 }
 ecmd ::= SEMI. {
-  sqlite3ErrorMsg(pParse, "syntax error: empty request");
+  diag_set(ClientError, ER_SQL_EMPTY_REQUEST);
+  sqlite3_error(pParse);
 }
 explain ::= .
 explain ::= EXPLAIN.              { pParse->explain = 1; }

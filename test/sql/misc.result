@@ -26,17 +26,17 @@ box.space.t1 == nil
 ...
 box.sql.execute(';')
 ---
-- error: 'syntax error: empty request'
+- error: 'Syntax error: empty request'
 ...
 box.sql.execute('')
 ---
-- error: 'syntax error: empty request'
+- error: 'Syntax error: empty request'
 ...
 box.sql.execute('     ;')
 ---
-- error: 'syntax error: empty request'
+- error: 'Syntax error: empty request'
 ...
 box.sql.execute('\n\n\n\t\t\t   ')
 ---
-- error: 'syntax error: empty request'
+- error: 'Syntax error: empty request'
 ...

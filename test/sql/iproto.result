@@ -118,11 +118,11 @@ cn:execute('select 1', nil, {dry_run = true})
 -- Empty request.
 cn:execute('')
 ---
-- error: 'Failed to execute SQL statement: syntax error: empty request'
+- error: 'Failed to execute SQL statement: Syntax error: empty request'
 ...
 cn:execute('   ;')
 ---
-- error: 'Failed to execute SQL statement: syntax error: empty request'
+- error: 'Failed to execute SQL statement: Syntax error: empty request'
 ...
 --
 -- Parmaeters bindig.
