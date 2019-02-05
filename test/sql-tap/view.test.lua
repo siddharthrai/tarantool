@@ -967,7 +967,7 @@ test:do_catchsql_test(
         DROP VIEW nosuchview
     ]], {
         -- <view-17.1>
-        1, "no such view: NOSUCHVIEW"
+        1, "View 'NOSUCHVIEW' does not exist"
         -- </view-17.1>
     })
 
