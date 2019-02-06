@@ -235,6 +235,7 @@ struct errcode_record {
 	/*180 */_(ER_SQL_EMPTY_REQUEST,		"Syntax error: empty request") \
 	/*181 */_(ER_SQL_IDENTIFIER_NAME_LEN,	"Invalid identifier '%s' (identifier name is too long)") \
 	/*182 */_(ER_SQL_TOO_MANY_COLUMNS,	"Can't create table '%s': too many columns") \
+	/*183 */_(ER_SQL_DUPLICATE_COLUMN_NAME,	"Duplicate column name: '%s'") \
 
 /*
  * !IMPORTANT! Please follow instructions at start of the file

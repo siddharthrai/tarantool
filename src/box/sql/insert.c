@@ -407,10 +407,10 @@ sqlite3Insert(Parse * pParse,	/* Parser context */
 				goto insert_cleanup;
 			}
 			if (bit_test(used_columns, j)) {
-				const char *err;
-				err = "table id list: duplicate column name %s";
-				sqlite3ErrorMsg(pParse,
-						err, pColumn->a[i].zName);
+				diag_set(ClientError,
+					 ER_SQL_DUPLICATE_COLUMN_NAME,
+					 pColumn->a[i].zName);
+				sqlite3_error(pParse);
 				goto insert_cleanup;
 			}
 			bit_set(used_columns, j);

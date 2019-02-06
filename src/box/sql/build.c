@@ -549,7 +549,8 @@ sqlite3AddColumn(Parse * pParse, Token * pName, struct type_def *type_def)
 	sqlite3NormalizeName(z);
 	for (i = 0; i < (int)p->def->field_count; i++) {
 		if (strcmp(z, p->def->fields[i].name) == 0) {
-			sqlite3ErrorMsg(pParse, "duplicate column name: %s", z);
+			diag_set(ClientError, ER_SQL_DUPLICATE_COLUMN_NAME, z);
+			sqlite3_error(pParse);
 			return;
 		}
 	}

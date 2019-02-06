@@ -519,14 +519,14 @@ test:do_catchsql_test(
     [[
         insert into test(a, a, b) values(1, 1, 1)
     ]],
-    {1, "table id list: duplicate column name A"})
+    {1, "Duplicate column name: 'A'"})
 
 test:do_catchsql_test(
     "insert-13.2",
     [[
         insert into test(a, b, b) values(1, 1, 1)
     ]],
-    {1, "table id list: duplicate column name B"})
+    {1, "Duplicate column name: 'B'"})
 
 test:do_execsql_test(
     "insert-13.3",

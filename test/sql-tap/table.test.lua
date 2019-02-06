@@ -697,7 +697,7 @@ test:do_catchsql_test(
         CREATE TABLE t6(a int primary key,b int,a int);
     ]], {
         -- <table-9.1>
-        1, "duplicate column name: A"
+        1, "Duplicate column name: 'A'"
         -- </table-9.1>
     })
 
@@ -707,7 +707,7 @@ test:do_catchsql_test(
         CREATE TABLE t6(a varchar(100) primary key, b blob, a integer);
     ]], {
         -- <table-9.2>
-        1, "duplicate column name: A"
+        1, "Duplicate column name: 'A'"
         -- </table-9.2>
     })
 
