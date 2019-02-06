@@ -699,8 +699,8 @@ sqlite3AddPrimaryKey(Parse * pParse,	/* Parsing context */
 			    sqlite3ExprSkipCollate(pList->a[i].pExpr);
 			assert(pCExpr != 0);
 			if (pCExpr->op != TK_ID) {
-				sqlite3ErrorMsg(pParse, "expressions prohibited"
-							" in PRIMARY KEY");
+				diag_set(ClientError, ER_SQL_EXPRESSION_IN_PK);
+				sqlite3_error(pParse);
 				goto primary_key_exit;
 			}
 			const char *name = pCExpr->u.zToken;
