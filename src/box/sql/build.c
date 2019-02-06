@@ -521,8 +521,8 @@ sqlite3AddColumn(Parse * pParse, Token * pName, struct type_def *type_def)
 		return;
 #if SQLITE_MAX_COLUMN
 	if ((int)p->def->field_count + 1 > db->aLimit[SQLITE_LIMIT_COLUMN]) {
-		sqlite3ErrorMsg(pParse, "too many columns on %s",
-				p->def->name);
+		diag_set(ClientError, ER_SQL_TOO_MANY_COLUMNS, p->def->name);
+		sqlite3_error(pParse);
 		return;
 	}
 #endif
