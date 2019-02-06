@@ -616,9 +616,9 @@ sqlite3AddDefaultValue(Parse * pParse, ExprSpan * pSpan)
 	if (p != 0) {
 		if (!sqlite3ExprIsConstantOrFunction
 		    (pSpan->pExpr, db->init.busy)) {
-			sqlite3ErrorMsg(pParse,
-					"default value of column [%s] is not constant",
-					p->def->fields[p->def->field_count - 1].name);
+			diag_set(ClientError, ER_SQL_DEFAULT_IS_NOT_CONST,
+				 p->def->fields[p->def->field_count - 1].name);
+			sqlite3_error(pParse);
 		} else {
 			assert(p->def != NULL);
 			struct field_def *field =

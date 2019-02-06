@@ -236,6 +236,7 @@ struct errcode_record {
 	/*181 */_(ER_SQL_IDENTIFIER_NAME_LEN,	"Invalid identifier '%s' (identifier name is too long)") \
 	/*182 */_(ER_SQL_TOO_MANY_COLUMNS,	"Can't create table '%s': too many columns") \
 	/*183 */_(ER_SQL_DUPLICATE_COLUMN_NAME,	"Duplicate column name: '%s'") \
+	/*184 */_(ER_SQL_DEFAULT_IS_NOT_CONST,	"Default value of column '%s' is not constant") \
 
 /*
  * !IMPORTANT! Please follow instructions at start of the file
