@@ -685,9 +685,8 @@ sqlite3AddPrimaryKey(Parse * pParse,	/* Parsing context */
 	if (pTab == 0)
 		goto primary_key_exit;
 	if (sql_table_primary_key(pTab) != NULL) {
-		sqlite3ErrorMsg(pParse,
-				"table \"%s\" has more than one primary key",
-				pTab->def->name);
+		diag_set(ClientError, ER_SQL_MORE_THAN_ONE_PK, pTab->def->name);
+		sqlite3_error(pParse);
 		goto primary_key_exit;
 	}
 	if (pList == 0) {

@@ -36,7 +36,7 @@ test:do_catchsql_test(
         );
     ]], {
         -- <unique-1.1>
-        1, [[table "T1" has more than one primary key]]
+        1, [[Table 'T1' has more than one primary key]]
         -- </unique-1.1>
     })
 

@@ -237,6 +237,7 @@ struct errcode_record {
 	/*182 */_(ER_SQL_TOO_MANY_COLUMNS,	"Can't create table '%s': too many columns") \
 	/*183 */_(ER_SQL_DUPLICATE_COLUMN_NAME,	"Duplicate column name: '%s'") \
 	/*184 */_(ER_SQL_DEFAULT_IS_NOT_CONST,	"Default value of column '%s' is not constant") \
+	/*185 */_(ER_SQL_MORE_THAN_ONE_PK,	"Table '%s' has more than one primary key") \
 
 /*
  * !IMPORTANT! Please follow instructions at start of the file
