@@ -502,6 +502,21 @@ t;
   172: box.error.ROWID_OVERFLOW
   173: box.error.DROP_COLLATION
   174: box.error.ILLEGAL_COLLATION_MIX
+  175: box.error.SQL_TABLE_EXISTS
+  176: box.error.SQL_NO_SUCH_TABLE
+  177: box.error.SQL_NO_SUCH_INDEX
+  178: box.error.SQL_NO_SUCH_VIEW
+  179: box.error.SQL_SYNTAX_ERROR
+  180: box.error.SQL_EMPTY_REQUEST
+  181: box.error.SQL_IDENTIFIER_NAME_LEN
+  182: box.error.SQL_TOO_MANY_COLUMNS
+  183: box.error.SQL_DUPLICATE_COLUMN_NAME
+  184: box.error.SQL_DEFAULT_IS_NOT_CONST
+  185: box.error.SQL_MORE_THAN_ONE_PK
+  186: box.error.SQL_EXPRESSION_IN_PK
+  187: box.error.SQL_WRONG_AUTOINCREMENT
+  188: box.error.SQL_WRONG_DELETE_TABLE
+  189: box.error.SQL_WRONG_DELETE_VIEW
 ...
 test_run:cmd("setopt delimiter ''");
 ---
