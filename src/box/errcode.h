@@ -240,6 +240,7 @@ struct errcode_record {
 	/*185 */_(ER_SQL_MORE_THAN_ONE_PK,	"Table '%s' has more than one primary key") \
 	/*186 */_(ER_SQL_EXPRESSION_IN_PK,	"Expressions prohibited in PRIMARY KEY") \
 	/*187 */_(ER_SQL_WRONG_AUTOINCREMENT,	"AUTOINCREMENT is only allowed on an INTEGER PRIMARY KEY or INT PRIMARY KEY") \
+	/*188 */_(ER_SQL_WRONG_DELETE_TABLE,	"Use DROP TABLE to delete table '%s'") \
 
 /*
  * !IMPORTANT! Please follow instructions at start of the file
