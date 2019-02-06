@@ -233,6 +233,7 @@ struct errcode_record {
 	/*178 */_(ER_SQL_NO_SUCH_VIEW,		"View '%s' does not exist") \
 	/*179 */_(ER_SQL_SYNTAX_ERROR,		"Near '%s': syntax error") \
 	/*180 */_(ER_SQL_EMPTY_REQUEST,		"Syntax error: empty request") \
+	/*181 */_(ER_SQL_IDENTIFIER_NAME_LEN,	"Invalid identifier '%s' (identifier name is too long)") \
 
 /*
  * !IMPORTANT! Please follow instructions at start of the file

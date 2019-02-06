@@ -332,14 +332,14 @@ int
 sqlite3CheckIdentifierName(Parse *pParse, char *zName)
 {
 	ssize_t len = strlen(zName);
-
-	if (len > BOX_NAME_MAX || identifier_check(zName, len) != 0) {
-		sqlite3ErrorMsg(pParse,
-				"identifier name is invalid: %s",
-				zName);
-		return SQLITE_ERROR;
+	if (len <= BOX_NAME_MAX && identifier_check(zName, len) == 0)
+		return SQLITE_OK;
+	if (len > BOX_NAME_MAX) {
+		diag_set(ClientError, ER_SQL_IDENTIFIER_NAME_LEN,
+			 tt_cstr(zName, BOX_INVALID_NAME_MAX));
 	}
-	return SQLITE_OK;
+	sqlite3_error(pParse);
+	return SQLITE_ERROR;
 }
 
 struct index *
@@ -3067,11 +3067,8 @@ sqlite3Savepoint(Parse * pParse, int op, Token * pName)
 			return;
 		}
 		if (op == SAVEPOINT_BEGIN &&
-			sqlite3CheckIdentifierName(pParse, zName)
-				!= SQLITE_OK) {
-			sqlite3ErrorMsg(pParse, "bad savepoint name");
+		    sqlite3CheckIdentifierName(pParse, zName) != SQLITE_OK)
 			return;
-		}
 		sqlite3VdbeAddOp4(v, OP_Savepoint, op, 0, 0, zName, P4_DYNAMIC);
 	}
 }
