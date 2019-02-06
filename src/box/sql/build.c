@@ -2567,9 +2567,10 @@ sql_drop_index(struct Parse *parse_context, struct SrcList *index_name_list,
 	assert(table_token->n > 0);
 	struct space *space = space_by_name(table_name);
 	if (space == NULL) {
-		if (!if_exists)
-			sqlite3ErrorMsg(parse_context, "no such space: %s",
-					table_name);
+		if (!if_exists) {
+			diag_set(ClientError, ER_SQL_NO_SUCH_TABLE, table_name);
+			sqlite3_error(parse_context);
+		}
 		goto exit_drop_index;
 	}
 	const char *index_name = index_name_list->a[0].zName;
