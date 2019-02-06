@@ -241,6 +241,7 @@ struct errcode_record {
 	/*186 */_(ER_SQL_EXPRESSION_IN_PK,	"Expressions prohibited in PRIMARY KEY") \
 	/*187 */_(ER_SQL_WRONG_AUTOINCREMENT,	"AUTOINCREMENT is only allowed on an INTEGER PRIMARY KEY or INT PRIMARY KEY") \
 	/*188 */_(ER_SQL_WRONG_DELETE_TABLE,	"Use DROP TABLE to delete table '%s'") \
+	/*189 */_(ER_SQL_WRONG_DELETE_VIEW,	"Use DROP VIEW to delete view '%s'") \
 
 /*
  * !IMPORTANT! Please follow instructions at start of the file

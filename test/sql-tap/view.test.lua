@@ -368,7 +368,7 @@ test:do_catchsql_test(
         DROP TABLE v1;
     ]], {
         -- <view-4.3>
-        1, "use DROP VIEW to delete view V1"
+        1, "Use DROP VIEW to delete view 'V1'"
         -- </view-4.3>
     })
 

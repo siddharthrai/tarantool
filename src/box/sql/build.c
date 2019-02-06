@@ -1734,8 +1734,8 @@ sql_drop_table(struct Parse *parse_context, struct SrcList *table_name_list,
 		goto exit_drop_table;
 	}
 	if (!is_view && space->def->opts.is_view) {
-		sqlite3ErrorMsg(parse_context, "use DROP VIEW to delete view %s",
-				space_name);
+		diag_set(ClientError, ER_SQL_WRONG_DELETE_VIEW, space_name);
+		sqlite3_error(parse_context);
 		goto exit_drop_table;
 	}
 	/*
