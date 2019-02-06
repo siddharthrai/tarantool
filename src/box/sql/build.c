@@ -732,8 +732,8 @@ sqlite3AddPrimaryKey(Parse * pParse,	/* Parsing context */
 		if (db->mallocFailed)
 			goto primary_key_exit;
 	} else if (autoInc) {
-		sqlite3ErrorMsg(pParse, "AUTOINCREMENT is only allowed on an "
-				"INTEGER PRIMARY KEY or INT PRIMARY KEY");
+		diag_set(ClientError, ER_SQL_WRONG_AUTOINCREMENT);
+		sqlite3_error(pParse);
 		goto primary_key_exit;
 	} else {
 		sql_create_index(pParse, 0, 0, pList, 0, sortOrder, false,

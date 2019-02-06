@@ -239,6 +239,7 @@ struct errcode_record {
 	/*184 */_(ER_SQL_DEFAULT_IS_NOT_CONST,	"Default value of column '%s' is not constant") \
 	/*185 */_(ER_SQL_MORE_THAN_ONE_PK,	"Table '%s' has more than one primary key") \
 	/*186 */_(ER_SQL_EXPRESSION_IN_PK,	"Expressions prohibited in PRIMARY KEY") \
+	/*187 */_(ER_SQL_WRONG_AUTOINCREMENT,	"AUTOINCREMENT is only allowed on an INTEGER PRIMARY KEY or INT PRIMARY KEY") \
 
 /*
  * !IMPORTANT! Please follow instructions at start of the file
