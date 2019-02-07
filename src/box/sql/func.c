@@ -129,27 +129,29 @@ typeofFunc(sqlite3_context * context, int NotUsed, sqlite3_value ** argv)
 }
 
 /**
- * Return number of chars in the given string.
+ * Return number of symbols in the given string.
  *
- * Number of chars != byte size of string because some characters
+ * Number of symbols != byte size of string because some symbols
  * are encoded with more than one byte. Also note that all
- * characters from 'str' to 'str + byte_len' would be counted,
+ * symbols from 'str' to 'str + byte_len' would be counted,
  * even if there is a '\0' somewhere between them.
  * @param str String to be counted.
  * @param byte_len Byte length of given string.
- * @return
+ * @return number of symbols in the given string.
  */
 static int
-count_chars(const unsigned char *str, size_t byte_len)
+char_count(const unsigned char *str, size_t byte_len)
 {
-	int n_chars = 0;
-	const unsigned char *prev_z;
-	for (size_t cnt = 0; cnt < byte_len; cnt += (str - prev_z)) {
-		n_chars++;
-		prev_z = str;
-		SQLITE_SKIP_UTF8(str);
+	int symbol_len = 0;
+	int offset = 0;
+	UChar32 res;
+	while (offset < (int) byte_len) {
+		U8_NEXT(str, offset, (int) byte_len, res)
+		if (res < 0)
+			break;
+		symbol_len++;
 	}
-	return n_chars;
+	return symbol_len;
 }
 
 /*
@@ -174,7 +176,7 @@ lengthFunc(sqlite3_context * context, int argc, sqlite3_value ** argv)
 			const unsigned char *z = sqlite3_value_text(argv[0]);
 			if (z == 0)
 				return;
-			len = count_chars(z, sqlite3_value_bytes(argv[0]));
+			len = char_count(z, sqlite3_value_bytes(argv[0]));
 			sqlite3_result_int(context, len);
 			break;
 		}
@@ -361,7 +363,7 @@ substrFunc(sqlite3_context * context, int argc, sqlite3_value ** argv)
 			return;
 		len = 0;
 		if (p1 < 0)
-			len = count_chars(z, sqlite3_value_bytes(argv[0]));
+			len = char_count(z, sqlite3_value_bytes(argv[0]));
 	}
 #ifdef SQLITE_SUBSTR_COMPATIBILITY
 	/* If SUBSTR_COMPATIBILITY is defined then substr(X,0,N) work the same as
@@ -410,7 +412,7 @@ substrFunc(sqlite3_context * context, int argc, sqlite3_value ** argv)
 		 * used because '\0' is not supposed to be
 		 * end-of-string symbol.
 		 */
-		int n_chars = count_chars(z, sqlite3_value_bytes(argv[0]));
+		int n_chars = char_count(z, sqlite3_value_bytes(argv[0]));
 		int cnt = 0;
 		while (cnt < n_chars && p1) {
 			SQLITE_SKIP_UTF8(z);

@@ -2795,61 +2795,60 @@ test:do_execsql_test(
 -- REPLACE
 test:do_execsql_test(
     "func-62",
-    "SELECT REPLACE(CHAR(00,65,00,65), CHAR(00), CHAR(65)) LIKE 'AAAA';",
-    {1})
+    "SELECT REPLACE(CHAR(00,65,00,65), CHAR(00), CHAR(65));",
+    {'AAAA'})
 
 test:do_execsql_test(
     "func-63",
-    "SELECT REPLACE(CHAR(00,65,00,65), CHAR(65), CHAR(00)) \
-    LIKE CHAR(00,00,00,00);",
-    {1})
+    "SELECT REPLACE(CHAR(00,65,00,65), CHAR(65), CHAR(00));",
+    {string.char(00,00,00,00)})
 
 -- SUBSTR
 test:do_execsql_test(
     "func-64",
-    "SELECT SUBSTR(CHAR(65,00,66,67), 3, 2) LIKE CHAR(66, 67);",
-    {1})
+    "SELECT SUBSTR(CHAR(65,00,66,67), 3, 2);",
+    {string.char(66,67)})
 
 test:do_execsql_test(
     "func-65",
-    "SELECT SUBSTR(CHAR(00,00,00,65), 1, 4) LIKE CHAR(00,00,00,65);",
-    {1})
+    "SELECT SUBSTR(CHAR(00,00,00,65), 1, 4);",
+    {string.char(00,00,00,65)})
 
 -- UPPER
 test:do_execsql_test(
     "func-66",
-    "SELECT UPPER(CHAR(00,97,00,98,00)) LIKE CHAR(00,65,00,66,00);",
-    {1})
+    "SELECT UPPER(CHAR(00,97,00,98,00));",
+    {string.char(00,65,00,66,00)})
 
 -- LOWER
 test:do_execsql_test(
     "func-67",
-    "SELECT LOWER(CHAR(00,65,00,66,00)) LIKE CHAR(00,97,00,98,00);",
-    {1})
+    "SELECT LOWER(CHAR(00,65,00,66,00));",
+    {string.char(00,97,00,98,00)})
 
 -- HEX
 test:do_execsql_test(
     "func-68",
-    "SELECT HEX(CHAR(00,65,00,65,00)) LIKE ('0041004100');",
-    {1})
+    "SELECT HEX(CHAR(00,65,00,65,00));",
+    {'0041004100'})
 
 -- TRIM
 test:do_execsql_test(
     "func-69",
-    "SELECT TRIM(CHAR(32,00,32,00,32)) LIKE (CHAR(00,32,00));",
-    {1})
+    "SELECT TRIM(CHAR(32,00,32,00,32));",
+    {string.char(00,32,00)})
 
 -- LTRIM
 test:do_execsql_test(
     "func-70",
-    "SELECT LTRIM(CHAR(32,00,32,00,32)) LIKE (CHAR(00,32,00,32));",
-    {1})
+    "SELECT LTRIM(CHAR(32,00,32,00,32));",
+    {string.char(00,32,00,32)})
 
 -- RTRIM
 test:do_execsql_test(
     "func-71",
-    "SELECT RTRIM(CHAR(32,00,32,00,32)) LIKE (CHAR(32,00,32,00));",
-    {1})
+    "SELECT RTRIM(CHAR(32,00,32,00,32));",
+    {string.char(32,00,32,00)})
 
 -- GROUP_CONCAT
 test:do_execsql_test(
