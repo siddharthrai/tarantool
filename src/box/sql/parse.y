@@ -283,10 +283,16 @@ autoinc(X) ::= AUTOINCR.  {X = 1;}
 //
 %type refargs {int}
 refargs(A) ::= .                  { A = FKEY_NO_ACTION; }
-refargs(A) ::= refargs(A) refarg(Y). { A = (A & ~Y.mask) | Y.value; }
+refargs(A) ::= refargs(A) refarg(Y). { if ((A & Y.mask) == 0) {
+                                           A = (A & ~Y.mask) | Y.value;
+                                       } else {
+                                           sqlite3ErrorMsg(pParse,
+                                                           "near \"%T\": duplicate FK action clause.",
+                                                           &pParse->sLastToken);
+                                       }
+                                     }
 %type refarg {struct {int value; int mask;}}
 refarg(A) ::= MATCH matcharg(X).     { A.value = X<<16; A.mask = 0xff0000; }
-refarg(A) ::= ON INSERT refact.      { A.value = 0;     A.mask = 0x000000; }
 refarg(A) ::= ON DELETE refact(X).   { A.value = X;     A.mask = 0x0000ff; }
 refarg(A) ::= ON UPDATE refact(X).   { A.value = X<<8;  A.mask = 0x00ff00; }
 %type matcharg {int}
